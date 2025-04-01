@@ -14,7 +14,7 @@ let pokemonRepository = (function () {
             });
           })
           .catch(error => console.error('Error loading the Pokémon list:', error));
-      }
+    }
 
     function add(pokemon) {
         if (typeof pokemon === 'object' && 'name' in pokemon && 'detailsUrl' in pokemon) {
@@ -34,11 +34,12 @@ let pokemonRepository = (function () {
                 pokemon.height = details.height;
                 pokemon.types = details.types.map(typeInfo => typeInfo.type.name);
             })
-            .catch(error => console.error(error));
+            .catch(error => console.error('Error loading Pokémon details:', error));
     }
 
     function showDetails(pokemon) {
         loadDetails(pokemon).then(() => {
+            console.log(pokemon);
             alert(`Name: ${pokemon.name}\nHeight: ${pokemon.height}\nTypes: ${pokemon.types.join(', ')}`);
         });
     }
