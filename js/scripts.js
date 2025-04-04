@@ -69,7 +69,6 @@ let pokemonRepository = (function () {
     getAll().forEach(addListItem);
   }
 
-  // Attach modal event listeners once
   closeModalButton.addEventListener('click', closeModalFunction);
   window.addEventListener('click', function (event) {
     if (event.target === modal) {
