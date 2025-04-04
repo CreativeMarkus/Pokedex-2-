@@ -1,6 +1,8 @@
 let pokemonRepository = (function () {
   let pokemonList = [];
   let pokemonListElement = document.querySelector('.pokemon-list');
+  let modal = document.getElementById('pokemonModal');
+  let closeModalButton = document.getElementById('closeModal');
 
   function loadList() {
     return fetch('https://pokeapi.co/api/v2/pokemon/?limit=150')
@@ -39,37 +41,15 @@ let pokemonRepository = (function () {
 
   function showDetails(pokemon) {
     loadDetails(pokemon).then(() => {
-      // Set modal content with Pokémon data
       document.getElementById('pokemonName').innerText = pokemon.name;
       document.getElementById('pokemonHeight').innerText = `Height: ${pokemon.height} m`;
       document.getElementById('pokemonImage').src = pokemon.imageUrl;
 
-      // Show the modal
-      let modal = document.getElementById('pokemonModal');
       modal.style.display = 'block';
-
-      // Add close functionality
-      let closeModal = document.getElementById('closeModal');
-      closeModal.addEventListener('click', closeModalFunction);
-
-      // Close modal when clicking outside of it
-      window.addEventListener('click', function (event) {
-        if (event.target === modal) {
-          closeModalFunction();
-        }
-      });
-
-      // Close the modal with the Escape key
-      window.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') {
-          closeModalFunction();
-        }
-      });
     });
   }
 
   function closeModalFunction() {
-    let modal = document.getElementById('pokemonModal');
     modal.style.display = 'none';
   }
 
@@ -86,19 +66,30 @@ let pokemonRepository = (function () {
   }
 
   function displayPokemons() {
-    getAll().forEach(function (pokemon) {
-      addListItem(pokemon);
-    });
+    getAll().forEach(addListItem);
   }
 
+  // Attach modal event listeners once
+  closeModalButton.addEventListener('click', closeModalFunction);
+  window.addEventListener('click', function (event) {
+    if (event.target === modal) {
+      closeModalFunction();
+    }
+  });
+  window.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+      closeModalFunction();
+    }
+  });
+
   return {
-    getAll: getAll,
-    add: add,
-    loadList: loadList,
-    loadDetails: loadDetails,
-    showDetails: showDetails,
-    addListItem: addListItem,
-    displayPokemons: displayPokemons
+    getAll,
+    add,
+    loadList,
+    loadDetails,
+    showDetails,
+    addListItem,
+    displayPokemons
   };
 })();
 
